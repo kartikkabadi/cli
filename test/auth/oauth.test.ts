@@ -3,7 +3,6 @@ import { describe, it, expect, beforeEach, afterEach, mock } from 'bun:test';
 // Prevent openBrowser from actually opening a browser during tests
 mock.module('child_process', () => ({
   execFile: () => {},
-  spawn: () => {},
 }));
 
 // Dynamic import to avoid module-level side effects
@@ -35,7 +34,7 @@ function deviceCodeResponse(reqBody: URLSearchParams, overrides: Record<string, 
     headers: new Headers({ 'Content-Type': 'application/json' }),
     json: async () => ({
       user_code: 'TEST-CODE',
-      verification_uri: 'about:blank',
+      verification_uri: 'https://example.com/verify',
       expired_in: Date.now() + 120_000,
       interval: 10,
       state: capturedState,

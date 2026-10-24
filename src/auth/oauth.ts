@@ -2,6 +2,7 @@ import type { OAuthCredentials, Region } from '../config/schema';
 import { OAUTH_HOSTS } from '../config/schema';
 import { CLIError } from '../errors/base';
 import { ExitCode } from '../errors/codes';
+import { openBrowser } from './browser';
 
 const CLIENT_ID = '659cf4c1-615c-45f6-a5f6-4bf15eb476e5';
 const CLIENT_NAME = 'MiniMax CLI';
@@ -115,20 +116,4 @@ export async function deviceCodeLogin(region: Region): Promise<OAuthCredentials>
 
 function sleep(ms: number): Promise<void> {
   return new Promise(r => setTimeout(r, ms));
-}
-
-/**
- * Open `url` in the user's default browser without going through a shell.
- * Using execFile/spawn (not exec) avoids shell-injection via crafted URLs (#79).
- */
-function openBrowser(url: string): void {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { execFile, spawn } = require('child_process') as typeof import('child_process');
-  if (process.platform === 'darwin') {
-    execFile('open', [url]);
-  } else if (process.platform === 'win32') {
-    spawn('cmd.exe', ['/c', 'start', '', url], { shell: false, detached: true });
-  } else {
-    execFile('xdg-open', [url]);
-  }
 }
