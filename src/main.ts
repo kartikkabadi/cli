@@ -34,6 +34,10 @@ const NO_AUTH_SETUP = [
 ];
 
 async function main() {
+  if (typeof Bun !== 'undefined' && !Bun.semver.satisfies(Bun.version, '>=1.4.4')) {
+    throw new Error(`Bun 1.4.4 or later is required; found ${Bun.version}.`);
+  }
+
   const argv = process.argv.slice(2);
 
   if (argv.includes('--version') || argv.includes('-v')) {

@@ -1,6 +1,10 @@
 import { readFileSync, writeFileSync } from 'fs';
 import dts from 'bun-plugin-dts';
 
+if (typeof Bun !== 'undefined' && !Bun.semver.satisfies(Bun.version, '>=1.4.4')) {
+  throw new Error(`Bun 1.4.4 or later is required; found ${Bun.version}.`);
+}
+
 const pkg = JSON.parse(readFileSync('package.json', 'utf-8'));
 const VERSION = process.env.VERSION ?? pkg.version;
 const OUT = 'dist/mmx.mjs';
